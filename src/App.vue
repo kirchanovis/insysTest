@@ -4,31 +4,37 @@
       app
       :clipped-left="clipped" :fixed="fixed"
     >
-      <v-toolbar-title v-text="title"></v-toolbar-title>
-         <v-spacer></v-spacer>
-
-        <v-toolbar-items>
-          <v-avatar slot="activator" size="36px">
-            <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
-          </v-avatar>
-        </v-toolbar-items>
+      <v-toolbar-title @click="">
+        <img src="@/assets/logo.png" class="logo"/>
+      </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-menu offset-y="offset-y">
+        <v-btn flat="flat" slot="activator" small="small">Иван Иванов
+          <v-icon>keyboard_arrow_down</v-icon>
+        </v-btn>
+        <v-list>
+          <v-list-tile @click="">
+            <v-icon class="mr-2">exit_to_app</v-icon>
+            <v-list-tile-title>Выйти</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+      <v-avatar class="mr-2" size="36"><img src="https://cdn.vuetifyjs.com/images/john.jpg"/></v-avatar>
     </v-toolbar>
     <v-content>
-      <HelloWorld/>
+      <router-view/>
     </v-content>
     <v-footer :fixed="fixed" app>
-      <span>&copy; 2017</span>
+      <span>&copy; 2018 год</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
   },
   data () {
     return {
@@ -47,3 +53,12 @@ export default {
   }
 }
 </script>
+
+
+<style scoped>
+.logo {
+  padding-top:10px;
+  height:60px;
+}
+</style>
+
