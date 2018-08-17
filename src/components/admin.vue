@@ -4,21 +4,27 @@
     <h2 class="card-title">Добавить пользователя</h2>
     <v-card>
       <v-form ref="form" style="margin:20px 50px;" >
+
         <v-text-field
           label="Имя"
           v-model="rForm.name"
           required
-          :vuelidate="$v.rForm.username" :vuelidate-messages="messages.rForm.username"
+          :counter="10"
+          :vuelidate="$v.rForm.name" :vuelidate-messages="messages.rForm.name"
         ></v-text-field>
+
+        <div class="error" v-if="!$v.name.required">Name is required</div>
+        <div class="error" v-if="!$v.name.minLength">Name must have at least {{$v.name.$params.minLength.min}} letters.</div>
+
         <v-text-field
           label="Фамилия"
+          v-model="rForm.lastName"
           required
         ></v-text-field>
         <v-text-field
           label="Отчество"
           required
         ></v-text-field>
-
 
         <v-menu
           ref="menu"
@@ -109,42 +115,19 @@ import { required, minLength, maxLength, email, alpha, alphaNum } from "vuelidat
 export default {
   name: 'Admin',
   validations: {
-    rForm: {
+    form: {
       name: {
         alpha,
         required,
         minLength: minLength(2),
-        maxLength: maxLength(255),
+        maxLength: maxLength(50),
       },
       lastName: {
         alpha,
         required,
         minLength: minLength(2),
         maxLength: maxLength(255),
-      },
-      username: {
-        alphaNum,
-        required,
-        minLength: minLength(3),
-        maxLength: maxLength(255),
-        exists(value) {
-          return this.checkExists(value, "username");
-        },
-      },
-      email: {
-        email,
-        required,
-        minLength: minLength(4),
-        maxLength: maxLength(255),
-        exists(value) {
-          return this.checkExists(value, "email");
-        },
-      },
-      password: {
-        required,
-        minLength: minLength(6),
-        maxLength: maxLength(255),
-      },
+      }
     },
   },
   data () {
