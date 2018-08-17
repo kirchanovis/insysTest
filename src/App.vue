@@ -4,7 +4,7 @@
       app
       :clipped-left="clipped" :fixed="fixed"
     >
-      <v-toolbar-title @click="">
+      <v-toolbar-title >
         <img src="@/assets/logo.png" class="logo"/>
       </v-toolbar-title>
         <v-spacer></v-spacer>
@@ -13,7 +13,7 @@
           <v-icon>keyboard_arrow_down</v-icon>
         </v-btn>
         <v-list>
-          <v-list-tile @click="">
+          <v-list-tile>
             <v-icon class="mr-2">exit_to_app</v-icon>
             <v-list-tile-title>Выйти</v-list-tile-title>
           </v-list-tile>
@@ -22,19 +22,21 @@
       <v-avatar class="mr-2" size="36"><img src="https://cdn.vuetifyjs.com/images/john.jpg"/></v-avatar>
     </v-toolbar>
     <v-content>
-      <router-view/>
+      <div class="content">
+        <router-view/>
+      </div>
     </v-content>
-    <v-footer :fixed="fixed" app>
-      <span>&copy; 2018 год</span>
-    </v-footer>
+    <Footer></Footer>
   </v-app>
 </template>
 
 <script>
+  import Footer from '@/components/footer.vue'
 
 export default {
   name: 'App',
   components: {
+    Footer
   },
   data () {
     return {
@@ -52,13 +54,16 @@ export default {
     }
   }
 }
-</script>
+  </script>
 
 
 <style scoped>
 .logo {
   padding-top:10px;
   height:60px;
+}
+.content{
+  margin-bottom: 120px;
 }
 </style>
 
