@@ -1,10 +1,22 @@
 <template>
 <v-app id="inspire">
+                <v-dialog
+                v-model="dialog"
+                max-width="290"
+              >
+                <v-card>
+                  <v-card-title class="headline">Логин или пароль введен не верно!</v-card-title>
+          
+                  <v-card-text>
+                    Убедитесь в правильности ввода логина и пароля
+                  </v-card-text>
+          
+                </v-card>
+              </v-dialog>
         <v-container align-center justify-center>
             <v-layout row wrap align-center justify-center>
                 <v-flex xs12 sm6>
                     <v-card class="elevation-8">
-
                         <!-- Login/Signin -->
                         <v-layout row align-center justify-center class="py-5">
 
@@ -73,12 +85,12 @@ export default {
     return {
       login: "",
       password: "",
+      dialog: false
     }
   },
   mounted: function () {
     this.$store.dispatch('getAuth')
     if(this.isLoggin){
-        console.log('переходим в админку')
         // переходим в админку
         this.$router.push('/admin')
     }
@@ -108,6 +120,8 @@ export default {
           if (this.login === "admin" && this.password === "123456") {
             this.$store.dispatch('setAuth')
             this.$router.push('/admin')
+          } else {
+            this.dialog = true
           }
       }
     }

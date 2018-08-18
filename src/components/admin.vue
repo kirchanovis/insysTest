@@ -1,6 +1,18 @@
 <template>
   <v-container fluid>
     <v-app id="inspire">
+                  <v-dialog
+                v-model="dialog"
+                max-width="290"
+              >
+                <v-card>
+          
+                  <v-card-text>
+                    Пользователь успешно добавлен
+                  </v-card-text>
+          
+                </v-card>
+              </v-dialog>
     <h2 class="card-title">Добавить пользователя</h2>
     <v-card>
       <v-form ref="form" style="margin:50px;" @submit.prevent="submit">
@@ -178,6 +190,7 @@ export default {
       phone: "",
       email: "",
       password: "",
+      dialog: false
     }
   },
   watch: {
@@ -255,10 +268,13 @@ export default {
           email: this.email,
           password: this.password
         })
+        this.dialog = true
       }
       this.clearForm()
+
     },
     clearForm () {
+      this.$v.$reset()
       this.name = ""
       this.lastName = ""
       this.middleName = ""
