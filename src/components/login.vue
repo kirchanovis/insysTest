@@ -14,6 +14,7 @@
                 </v-card>
               </v-dialog>
         <v-container align-center justify-center>
+          <div class="center-block">
             <v-layout row wrap align-center justify-center>
                 <v-flex xs12 sm6>
                     <v-card class="elevation-8">
@@ -64,6 +65,7 @@
                     </v-card>
                 </v-flex>
             </v-layout>
+          </div>
         </v-container>
     </v-app>
 </template>
@@ -131,5 +133,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.center-block{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+}
 </style>
