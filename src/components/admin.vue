@@ -7,29 +7,31 @@
 
         <v-text-field
           label="Имя"
-          v-model="form.name"
+          v-model="name"
           required
-          :counter="10"
-          @input="$v.form.name.$touch()"
-          @blur="$v.form.name.$touch()"
+          :counter="50"
+          @input="$v.name.$touch()"
+          @blur="$v.name.$touch()"
           :error-messages="nameErrors"
         ></v-text-field>
 
         <v-text-field
           label="Фамилия"
-          v-model="form.lastName"
+          v-model="lastName"
           required
-          @input="$v.form.lastName.$touch()"
-          @blur="$v.form.lastName.$touch()"
+          @input="$v.lastName.$touch()"
+          @blur="$v.lastName.$touch()"
           :error-messages="lastNameErrors"
+          :counter="50"
         ></v-text-field>
         <v-text-field
           label="Отчество"
-          v-model="form.middleName"
+          v-model="middleName"
           required
-          @input="$v.form.middleName.$touch()"
-          @blur="$v.form.middleName.$touch()"
+          @input="$v.middleName.$touch()"
+          @blur="$v.middleName.$touch()"
           :error-messages="middleNameErrors"
+          :counter="50"
         ></v-text-field>
 
         <v-menu
@@ -45,18 +47,18 @@
         >
           <v-text-field
             slot="activator"
-            v-model="form.birthday"
+            v-model="birthday"
             label="Дата рождения"
             readonly
-            @input="$v.form.birthday.$touch()"
-            @blur="$v.form.birthday.$touch()"
+            @input="$v.birthday.$touch()"
+            @blur="$v.birthday.$touch()"
             :error-messages="birthdayErrors"
           ></v-text-field>
 
           <v-date-picker
             locale = "ru-ru"
             ref="picker"
-            v-model="form.birthday"
+            v-model="birthday"
             :max="new Date().toISOString().substr(0, 10)"
             min="1950-01-01"
             @change="save"
@@ -65,38 +67,38 @@
 
         <v-text-field
           label="Должность"
-          v-model="form.position"
+          v-model="position"
         ></v-text-field>
 
         <v-text-field
           mask="+7 (###) ### - ## - ##"
-          v-model="form.phone"
+          v-model="phone"
           type="text"
           label="Телефон"
           required
-          @input="$v.form.phone.$touch()"
-          @blur="$v.form.phone.$touch()"
+          @input="$v.phone.$touch()"
+          @blur="$v.phone.$touch()"
           :error-messages="phoneErrors"
         ></v-text-field>
 
         <v-text-field
-          v-model="form.email"
+          v-model="email"
           type="email"
           label="EMail"
         ></v-text-field>
 
         <v-text-field
-          v-model="form.position"
+          v-model="deportament"
           label="Подразделение"
         ></v-text-field>
 
         <v-text-field
-          v-model="form.password"
+          v-model="password"
           type="password"
           label="Пароль"
           required
-          @input="$v.form.password.$touch()"
-          @blur="$v.form.password.$touch()"
+          @input="$v.password.$touch()"
+          @blur="$v.password.$touch()"
           :error-messages="passwordErrors"
         ></v-text-field>
     
@@ -131,41 +133,33 @@
 </template>
 
 <script>
-import { required, minLength, maxLength, alpha } from "vuelidate/lib/validators";
+import { required, minLength, maxLength } from "vuelidate/lib/validators";
 
 export default {
   name: 'Admin',
   validations: {
-    form: {
-      name: {
-        alpha,
-        required,
-        maxLength: maxLength(50),
-      },
-      lastName: {
-        alpha,
-        required,
-        maxLength: maxLength(50),
-      },
-      middleName: {
-        alpha,
-        required,
-        maxLength: maxLength(50),
-      },
-      birthday: {
-        alpha,
-        required,
-      },
-      phone: {
-        alpha,
-        required,
-      },
-      password: {
-        alpha,
-        required,
-        minLength: minLength(6),
-      }
+    name: {
+      required,
+      maxLength: maxLength(50),
     },
+    lastName: {
+      required,
+      maxLength: maxLength(50),
+    },
+    middleName: {
+      required,
+      maxLength: maxLength(50),
+    },
+    birthday: {
+      required,
+    },
+    phone: {
+      required,
+    },
+    password: {
+      required,
+      minLength: minLength(6),
+    }
   },
   data () {
     return {
@@ -175,15 +169,15 @@ export default {
         { text: 'Email', value: 'email' , sortable: false},
         { text: 'Телефон', value: 'phone' }
       ],
-      form: {
-        name: "",
-        lastName: "",
-        middlename: "",
-        birthday: "",
-        phone: "",
-        email: "",
-        password: "",
-      },
+      name: "",
+      lastName: "",
+      middleName: "",
+      position: "",
+      deportament: "",
+      birthday: "",
+      phone: "",
+      email: "",
+      password: "",
     }
   },
   watch: {
@@ -193,52 +187,55 @@ export default {
   },
   computed:{
     users() {
-      console.log(this.$store.getters.results)
       return this.$store.getters.results
     },
     nameErrors () {
       const errors = []
-      if (!this.$v.form.name.$dirty) return errors
-      !this.$v.form.name.maxLength && errors.push('Имя может содержать не более 50 символов')
-      !this.$v.form.name.required && errors.push('Введите Имя')
+      if (!this.$v.name.$dirty) return errors
+      !this.$v.name.maxLength && errors.push('Имя может содержать не более 50 символов')
+      !this.$v.name.required && errors.push('Введите Имя')
       return errors
     },
     lastNameErrors () {
       const errors = []
-      if (!this.$v.form.lastName.$dirty) return errors
-      !this.$v.form.lastName.maxLength && errors.push('Максимум 50 символов')
-      !this.$v.form.lastName.required && errors.push('Введите Фамилию')
+      if (!this.$v.lastName.$dirty) return errors
+      !this.$v.lastName.maxLength && errors.push('Максимум 50 символов')
+      !this.$v.lastName.required && errors.push('Введите Фамилию')
       return errors
     },
     middleNameErrors () {
       const errors = []
-      if (!this.$v.form.middleName.$dirty) return errors
-      !this.$v.form.middleName.maxLength && errors.push('Максимум 50 символов')
-      !this.$v.form.middleName.required && errors.push('Введите Отчество')
+      if (!this.$v.middleName.$dirty) return errors
+      !this.$v.middleName.maxLength && errors.push('Максимум 50 символов')
+      !this.$v.middleName.required && errors.push('Введите Отчество')
       return errors
     },
     birthdayErrors () {
       const errors = []
-      if (!this.$v.form.birthday.$dirty) return errors
-      !this.$v.form.birthday.required && errors.push('Введите дату рождения')
+      if (!this.$v.birthday.$dirty) return errors
+      !this.$v.birthday.required && errors.push('Введите дату рождения')
       return errors
     },
     phoneErrors () {
       const errors = []
-      if (!this.$v.form.phone.$dirty) return errors
-      !this.$v.form.phone.required && errors.push('Введите телефон')
+      if (!this.$v.phone.$dirty) return errors
+      !this.$v.phone.required && errors.push('Введите телефон')
       return errors
     },
     passwordErrors () {
       const errors = []
-      if (!this.$v.form.password.$dirty) return errors
-      !this.$v.form.password.minLength && errors.push('Минимум 6 символов')
-      !this.$v.form.password.required && errors.push('Введите пароль')
+      if (!this.$v.password.$dirty) return errors
+      !this.$v.password.minLength && errors.push('Минимум 6 символов')
+      !this.$v.password.required && errors.push('Введите пароль')
       return errors
     },
   },
   mounted: function () {
-    this.$store.dispatch('getUsers')
+    if(this.$store.getters.getToken) {
+      this.$store.dispatch('getUsers')
+    } else {
+      this.$router.push('/')
+    }
   },
   methods: {
     save (date) {
@@ -246,14 +243,32 @@ export default {
     },
     submit () {
       this.$v.$touch()
-      console.log(this.$v.$invalid)
-      if (this.$v.$invalid) {
-        console.log('Сохранить')
-      } else {
-        console.log('Сохранить2')
+      if (!this.$v.$invalid) {
+        this.$store.dispatch('addUsers',{
+          name: this.name,
+          lastName: this.lastName,
+          middleName: this.middleName,
+          position: this.position,
+          deportament: this.deportament,
+          birthday: this.birthday,
+          phone: this.phone,
+          email: this.email,
+          password: this.password
+        })
       }
-
+      this.clearForm()
     },
+    clearForm () {
+      this.name = ""
+      this.lastName = ""
+      this.middleName = ""
+      this.position = ""
+      this.deportament = ""
+      this.birthday = ""
+      this.phone = ""
+      this.email = ""
+      this.password = ""
+    }
   }
 }
 </script>

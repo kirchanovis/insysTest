@@ -4,26 +4,36 @@
             <v-layout row wrap align-center justify-center>
                 <v-flex xs12 sm6>
                     <v-card class="elevation-8">
-                        <!-- ERROR MESSAGE -->
-                        <v-layout row v-if="error">
-                            <v-flex xs12 sm6 offset-sm3>
-                                <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
-                            </v-flex>
-                        </v-layout>
 
                         <!-- Login/Signin -->
                         <v-layout row align-center justify-center class="py-5">
 
-                            <v-form @submit.prevent="onSignin">
+                            <v-form  @submit.prevent="submit">
 
                                 <!-- <v-layout row> -->
                                 <v-flex xs12>
                                     <h1 class="text-xs-center mb-5">Вход</h1>
-                                    <v-text-field name="email" label="Логин" id="email" v-model="email" type="email" required></v-text-field>
+                                    <v-text-field 
+                                        label="Логин" 
+                                        v-model="login" 
+                                        type="text" 
+                                        required
+                                        @input="$v.login.$touch()"
+                                        @blur="$v.login.$touch()"
+                                        :error-messages="loginErrors"
+                                        ></v-text-field>
                                 </v-flex>
 
                                 <v-flex xs12>
-                                    <v-text-field name="password" label="Пароль" id="password" v-model="password" type="password" required></v-text-field>
+                                    <v-text-field
+                                        label="Пароль" 
+                                        v-model="password" 
+                                        type="password" 
+                                        required
+                                        @input="$v.password.$touch()"
+                                        @blur="$v.password.$touch()"
+                                        :error-messages="passwordErrors"
+                                        ></v-text-field>
                                 </v-flex>
 
                                 <v-flex xs12 class="py-3">
@@ -47,28 +57,65 @@
 </template>
 
 <script>
+import { required } from "vuelidate/lib/validators";
+
 export default {
   name: 'Login',
-  props: {
-    msg: String
+  validations: {
+    login: {
+      required,
+    },
+    password: {
+      required,
+    }
+  },
+  data () {
+    return {
+      login: "",
+      password: "",
+    }
+  },
+  mounted: function () {
+    this.$store.dispatch('getAuth')
+    if(this.isLoggin){
+        console.log('переходим в админку')
+        // переходим в админку
+        this.$router.push('/admin')
+    }
+  },
+  computed:{
+    isLoggin() {
+      console.log(this.$store.getters.getToken)
+      return this.$store.getters.getToken
+    },
+    loginErrors () {
+      const errors = []
+      if (!this.$v.login.$dirty) return errors
+      !this.$v.login.required && errors.push('Введите Логин')
+      return errors
+    },
+    passwordErrors () {
+      const errors = []
+      if (!this.$v.password.$dirty) return errors
+      !this.$v.password.required && errors.push('Введите Пароль')
+      return errors
+    },
+  },
+  methods: {
+    submit () {
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
+          if (this.login === "admin" && this.password === "123456") {
+            this.$store.dispatch('setAuth')
+            this.$router.push('/admin')
+          }
+      }
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>
