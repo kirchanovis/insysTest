@@ -66,7 +66,7 @@ const store = new Vuex.Store({
                 const users  = response.data;
                 commit('SET', {type : 'users', items: users})
               }).catch(error => {
-                console.log(error)
+                  error
               })
             } else {
                 const users = JSON.parse(localStorage.getItem('users'));

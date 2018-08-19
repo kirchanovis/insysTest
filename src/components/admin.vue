@@ -102,11 +102,10 @@
   
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click.native="editClose">Отмена</v-btn>
-              <v-btn color="blue darken-1" flat @click.native="editSubmit">Сохранить</v-btn>
+              <v-btn color="teal darken-1" flat @click.native="editClose">Отмена</v-btn>
+              <v-btn color="primary" flat @click.native="editSubmit">Сохранить</v-btn>
             </v-card-actions>
           </v-card>
-          <p>{{ $v.editUser.$invalid }}</p>
         </v-dialog>
         <v-dialog
           v-model="dialog"
@@ -122,103 +121,128 @@
         </v-dialog>
     <h2 class="card-title">Добавить пользователя</h2>
     <v-card>
-      <v-form ref="form" style="margin:50px;" @submit.prevent="submit">
-        <v-text-field
-          label="Имя"
-          v-model="mainForm.name"
-          required
-          :counter="50"
-          @input="$v.mainForm.name.$touch()"
-          @blur="$v.mainForm.name.$touch()"
-          :error-messages="nameErrors"
-        ></v-text-field>
+      <v-form ref="form" style="margin:20px 50px;" @submit.prevent="submit">
+        <v-container grid-list-md>
+          <v-layout wrap>
+            <v-flex xs12 sm6 md4>
+              <v-text-field
+                label="Имя"
+                v-model="mainForm.name"
+                required
+                :counter="50"
+                @input="$v.mainForm.name.$touch()"
+                @blur="$v.mainForm.name.$touch()"
+                :error-messages="nameErrors"
+              ></v-text-field>
+            </v-flex>
+            <v-flex xs12 sm6 md4>
+              <v-text-field
+                label="Фамилия"
+                v-model="mainForm.lastName"
+                required
+                @input="$v.mainForm.lastName.$touch()"
+                @blur="$v.mainForm.lastName.$touch()"
+                :error-messages="lastNameErrors"
+                :counter="50"
+              ></v-text-field>          
+            </v-flex>
+            <v-flex xs12 sm6 md4>
+              <v-text-field
+                label="Отчество"
+                v-model="mainForm.middleName"
+                required
+                @input="$v.mainForm.middleName.$touch()"
+                @blur="$v.mainForm.middleName.$touch()"
+                :error-messages="middleNameErrors"
+                :counter="50"
+              ></v-text-field>
+            </v-flex>
+            <v-flex xs12 sm6 md4>
+              <v-menu
+                ref="menu"
+                :close-on-content-click="false"
+                v-model="menu"
+                :nudge-right="40"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
+                <v-text-field
+                  slot="activator"
+                  v-model="mainForm.birthday"
+                  label="Дата рождения"
+                  readonly
+                  @input="$v.mainForm.birthday.$touch()"
+                  @blur="$v.mainForm.birthday.$touch()"
+                  :error-messages="birthdayErrors"
+                ></v-text-field>
 
-        <v-text-field
-          label="Фамилия"
-          v-model="mainForm.lastName"
-          required
-          @input="$v.mainForm.lastName.$touch()"
-          @blur="$v.mainForm.lastName.$touch()"
-          :error-messages="lastNameErrors"
-          :counter="50"
-        ></v-text-field>
-        <v-text-field
-          label="Отчество"
-          v-model="mainForm.middleName"
-          required
-          @input="$v.mainForm.middleName.$touch()"
-          @blur="$v.mainForm.middleName.$touch()"
-          :error-messages="middleNameErrors"
-          :counter="50"
-        ></v-text-field>
+                <v-date-picker
+                  locale = "ru-ru"
+                  ref="picker"
+                  v-model="mainForm.birthday"
+                  :max="new Date().toISOString().substr(0, 10)"
+                  min="1950-01-01"
+                  @change="save"
+                ></v-date-picker>
+              </v-menu>
+            </v-flex>
+            <v-flex xs12 sm6 md4>
+              <v-text-field
+                label="Должность"
+                v-model="mainForm.position"
+              ></v-text-field>
+            </v-flex>
+            <v-flex xs12 sm6 md4>
+              <v-text-field
+                mask="+7 (###) ### - ## - ##"
+                v-model="mainForm.phone"
+                type="text"
+                label="Телефон"
+                required
+                @input="$v.mainForm.phone.$touch()"
+                @blur="$v.mainForm.phone.$touch()"
+                :error-messages="phoneErrors"
+              ></v-text-field>
+            </v-flex>
+            <v-flex xs12 sm6 md4>
+              <v-text-field
+                v-model="mainForm.email"
+                type="email"
+                label="EMail"
+              ></v-text-field>
+            </v-flex>
+            <v-flex xs12 sm6 md4>
+              <v-text-field
+                v-model="mainForm.deportament"
+                label="Подразделение"
+              ></v-text-field>
+            </v-flex>
+            <v-flex xs12 sm6 md4>
+              <v-text-field
+                v-model="mainForm.password"
+                type="password"
+                label="Пароль"
+                required
+                @input="$v.mainForm.password.$touch()"
+                @blur="$v.mainForm.password.$touch()"
+                :error-messages="passwordErrors"
+              ></v-text-field>
+            </v-flex>
+          </v-layout>
+        </v-container>
+       
 
-        <v-menu
-          ref="menu"
-          :close-on-content-click="false"
-          v-model="menu"
-          :nudge-right="40"
-          lazy
-          transition="scale-transition"
-          offset-y
-          full-width
-          min-width="290px"
-        >
-          <v-text-field
-            slot="activator"
-            v-model="mainForm.birthday"
-            label="Дата рождения"
-            readonly
-            @input="$v.mainForm.birthday.$touch()"
-            @blur="$v.mainForm.birthday.$touch()"
-            :error-messages="birthdayErrors"
-          ></v-text-field>
 
-          <v-date-picker
-            locale = "ru-ru"
-            ref="picker"
-            v-model="mainForm.birthday"
-            :max="new Date().toISOString().substr(0, 10)"
-            min="1950-01-01"
-            @change="save"
-          ></v-date-picker>
-        </v-menu>
 
-        <v-text-field
-          label="Должность"
-          v-model="mainForm.position"
-        ></v-text-field>
+       
 
-        <v-text-field
-          mask="+7 (###) ### - ## - ##"
-          v-model="mainForm.phone"
-          type="text"
-          label="Телефон"
-          required
-          @input="$v.mainForm.phone.$touch()"
-          @blur="$v.mainForm.phone.$touch()"
-          :error-messages="phoneErrors"
-        ></v-text-field>
 
-        <v-text-field
-          v-model="mainForm.email"
-          type="email"
-          label="EMail"
-        ></v-text-field>
 
-        <v-text-field
-          v-model="mainForm.deportament"
-          label="Подразделение"
-        ></v-text-field>
 
-        <v-text-field
-          v-model="mainForm.password"
-          type="password"
-          label="Пароль"
-          required
-          @input="$v.mainForm.password.$touch()"
-          @blur="$v.mainForm.password.$touch()"
-          :error-messages="passwordErrors"
-        ></v-text-field>
+
     
         <v-btn type="submit">
           Сохранить
@@ -474,7 +498,6 @@ export default {
     editSubmit() {
       this.$v.editUser.$touch()
       if (!this.$v.editUser.$invalid) {
-        console.log(this.editedIndex)
         this.$store.dispatch('updateUser', { user: this.editUser, index: this.editedIndex })
         this.dialogEdit = false;
       }
@@ -525,9 +548,9 @@ export default {
       this.snackText = 'Открыто окно'
     },
     close () {
-      console.log('Dialog closed')
+      // console.log('Dialog closed')
     },
-    editClose() {
+    editClose () {
       this.dialogEdit = false
     },
     editItem (item) {

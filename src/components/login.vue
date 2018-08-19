@@ -38,7 +38,7 @@
                                 </v-flex>
 
                                 <v-flex xs12>
-                                    <v-text-field
+                                    <v-text-field 
                                         label="Пароль" 
                                         v-model="password" 
                                         type="password" 
@@ -51,7 +51,9 @@
 
                                 <v-flex xs12 class="py-3">
                                     <div class="text-xs-center">
-                                        <v-btn outline type="submit">
+                                        <v-btn 
+                                          type="submit"
+                                          color="primary">
                                             Войти
                                             <v-icon right>lock_open</v-icon>
                                             <span slot="loader" class="custom-loader">
@@ -99,7 +101,6 @@ export default {
   },
   computed:{
     isLoggin() {
-      console.log(this.$store.getters.getToken)
       return this.$store.getters.getToken
     },
     loginErrors () {

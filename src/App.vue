@@ -69,7 +69,7 @@ export default {
   height:60px;
 }
 .content{
-  margin-bottom: 120px;
+  margin-bottom: 50px;
 }
 </style>
 
